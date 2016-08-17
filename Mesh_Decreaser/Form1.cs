@@ -26,30 +26,26 @@ namespace Mesh_Decreaser
             textBox1.Text = fn;
             if (File.Exists(fn))
             {
-                XmlTextReader reader = null;
+                XmlDocument reader = new XmlDocument();
+                reader.Load(fn);
+                
                 try
                 {
-                    reader = new XmlTextReader(fn);
+                    XmlElement rootElement = reader.DocumentElement;
                     //ストリームからノードを読み取る
                     {
-                        if (reader.NodeType == XmlNodeType.Element)
+                        XmlNodeList graundList =
+                            reader.GetElementsByTagName("low");
+                        Console.WriteLine(graundList.Count.ToString());
+                        for(int i=0; i < graundList.Count; i++)
                         {
-                            switch (reader.LocalName)
-                            {
-                                case "gml:high":
-                                    textBox2.Text += reader.ReadString() + "\r\n";
-                                    break;
-                            }
+                            textBox2.Text += graundList[i].ToString();
                         }
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
-                }
-                finally
-                {
-                    reader.Close();
                 }
             }
 
